@@ -1,36 +1,137 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PDF Table Selector
 
-## Getting Started
+A modern web application built with Next.js that allows users to select and extract tables from PDF documents. This project provides a user-friendly interface for working with PDF files and their tabular data.
 
-First, run the development server:
+## Author
+
+**Onur Sevinc** - [onursevinc.dev](https://onursevinc.dev)
+
+## Features
+
+- PDF file upload and preview
+- Table selection and extraction
+- Modern and responsive UI
+- Dark/Light mode support
+- Interactive table selection interface
+- PDF manipulation capabilities
+
+## Tech Stack
+
+- **Framework**: Next.js 15.3.1
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: Radix UI
+- **PDF Processing**: pdf-lib, pdfjs-dist
+- **State Management**: React Hooks
+- **Build Tool**: Turbopack
+
+## Prerequisites
+
+- Node.js (v18 or higher)
+- npm or yarn
+
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone [repository-url]
+cd pdf-selector-table
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+## Development
+
+To run the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Building for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To create a production build:
 
-## Learn More
+```bash
+npm run build
+# or
+yarn build
+```
 
-To learn more about Next.js, take a look at the following resources:
+To start the production server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run start
+# or
+yarn start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```
+src/
+├── app/           # Next.js app router pages
+├── components/    # Reusable React components
+├── lib/          # Utility functions and helpers
+└── types/        # TypeScript type definitions
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Available Scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev` - Start development server with Turbopack
+- `npm run build` - Create production build
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+
+## Dependencies
+
+### Main Dependencies
+
+- next
+- react
+- react-dom
+- pdf-lib
+- pdfjs-dist
+- react-pdf
+- @radix-ui components
+- next-themes
+- tailwindcss
+
+### Development Dependencies
+
+- typescript
+- eslint
+- @types packages
+- tailwindcss
+- postcss
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Support
+
+For support, please open an issue in the GitHub repository or contact the maintainers.
+
+---
+
+Created with ❤️ by [Onur Sevinc](https://onursevinc.dev)
