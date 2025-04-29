@@ -1,4 +1,4 @@
-# PDF Table Selector
+# Table Fusion
 
 A modern web application built with Next.js that allows users to select and extract tables from PDF documents. This project provides a user-friendly interface for working with PDF files and their tabular data.
 
@@ -36,7 +36,7 @@ A modern web application built with Next.js that allows users to select and extr
 
 ```bash
 git clone [repository-url]
-cd pdf-selector-table
+cd table-fusion
 ```
 
 2. Install dependencies:
