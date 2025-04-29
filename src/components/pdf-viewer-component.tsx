@@ -1,3 +1,8 @@
+/**
+ * @author Onur Sevinc
+ * @website https://onursevinc.dev
+ */
+
 "use client";
 
 import { Document, Page, pdfjs } from "react-pdf";
@@ -472,15 +477,27 @@ export default function PDFViewerComponent({ file }: PDFViewerComponentProps) {
 
   const exportToJSON = () => {
     const combinedTable = getCombinedTable();
-    if (!combinedTable || !selection) return;
+    if (!combinedTable) return;
+
+    // Create a default selection area if none exists
+    const defaultSelection = {
+      startY: 0,
+      startX: 0,
+      endX: 800, // Default width
+      endY: 600, // Default height
+    };
 
     const jsonData: TableData[] = [
       {
         extraction_method: "lattice",
-        top: selection.startY,
-        left: selection.startX,
-        width: selection.endX - selection.startX,
-        height: selection.endY - selection.startY,
+        top: selection?.startY || defaultSelection.startY,
+        left: selection?.startX || defaultSelection.startX,
+        width: selection
+          ? selection.endX - selection.startX
+          : defaultSelection.endX,
+        height: selection
+          ? selection.endY - selection.startY
+          : defaultSelection.endY,
         data: combinedTable.rows.map((row) =>
           row.cells.map((cell) => ({
             top: cell.y,
@@ -509,21 +526,144 @@ export default function PDFViewerComponent({ file }: PDFViewerComponentProps) {
   const getCombinedTable = () => {
     if (selectedTables.length === 0) return null;
 
+    // Get all unique headers from all tables
+    const allHeaders = new Set<string>();
+    const commonHeaders = new Set<string>();
+    let isFirstTable = true;
+
+    // First, collect all headers and identify common ones
+    selectedTables.forEach(({ table }) => {
+      const headers = table.rows[0].cells.map((cell) => cell.text.trim());
+      headers.forEach((header) => {
+        allHeaders.add(header);
+        if (isFirstTable) {
+          commonHeaders.add(header);
+        }
+      });
+      isFirstTable = false;
+    });
+
+    // Convert headers to arrays for easier manipulation
+    const headerArray = Array.from(allHeaders);
+    const commonHeaderArray = Array.from(commonHeaders);
+
+    // Create the combined table structure
     const combinedRows: TableRow[] = [];
 
-    // İlk tablonun header'ını al
-    const firstTable = selectedTables[0].table;
-    combinedRows.push(firstTable.rows[0]);
+    // Add the header row with all columns
+    const headerRow: TableRow = {
+      cells: headerArray.map((header) => ({
+        text: header,
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+      })),
+    };
+    combinedRows.push(headerRow);
 
-    // Diğer tabloların verilerini ekle
+    // Process each table's data rows
     selectedTables.forEach(({ table }) => {
-      // Header hariç tüm satırları ekle
+      const tableHeaders = table.rows[0].cells.map((cell) => cell.text.trim());
+
+      // Skip the header row and process data rows
       table.rows.slice(1).forEach((row) => {
-        combinedRows.push(row);
+        const newCells: TableCell[] = [];
+
+        // For each column in the combined header
+        headerArray.forEach((header) => {
+          const headerIndex = tableHeaders.indexOf(header);
+          if (headerIndex !== -1) {
+            // If this column exists in the current table, use its value
+            const cellValue = row.cells[headerIndex].text.trim();
+            // Only add non-empty values
+            if (cellValue) {
+              newCells.push(row.cells[headerIndex]);
+            } else {
+              // If the cell is empty, try to find a matching cell in existing rows
+              const matchingRow = combinedRows.find((existingRow) => {
+                const pomCodeCell = existingRow.cells.find(
+                  (cell) => cell.text.trim() === row.cells[0].text.trim()
+                );
+                return pomCodeCell !== undefined;
+              });
+
+              if (matchingRow) {
+                const matchingCell = matchingRow.cells.find(
+                  (cell) => cell.text.trim() === header
+                );
+                if (matchingCell) {
+                  newCells.push(matchingCell);
+                } else {
+                  newCells.push({
+                    text: "",
+                    x: 0,
+                    y: row.cells[0]?.y || 0,
+                    width: 0,
+                    height: row.cells[0]?.height || 0,
+                  });
+                }
+              } else {
+                newCells.push({
+                  text: "",
+                  x: 0,
+                  y: row.cells[0]?.y || 0,
+                  width: 0,
+                  height: row.cells[0]?.height || 0,
+                });
+              }
+            }
+          } else {
+            // If this column doesn't exist in the current table, add an empty cell
+            newCells.push({
+              text: "",
+              x: 0,
+              y: row.cells[0]?.y || 0,
+              width: 0,
+              height: row.cells[0]?.height || 0,
+            });
+          }
+        });
+
+        // Check if this row's POM Code already exists in combined rows
+        const existingRowIndex = combinedRows.findIndex(
+          (existingRow) =>
+            existingRow.cells[0].text.trim() === row.cells[0].text.trim()
+        );
+
+        if (existingRowIndex !== -1) {
+          // Merge the data with the existing row
+          const existingRow = combinedRows[existingRowIndex];
+          newCells.forEach((cell, index) => {
+            if (cell.text.trim()) {
+              existingRow.cells[index] = cell;
+            }
+          });
+        } else {
+          combinedRows.push({ cells: newCells });
+        }
       });
     });
 
-    return { rows: combinedRows };
+    // Sort the columns to maintain the order of common headers and append new ones
+    const sortedHeaderArray = [...commonHeaderArray];
+    headerArray.forEach((header) => {
+      if (!commonHeaderArray.includes(header)) {
+        sortedHeaderArray.push(header);
+      }
+    });
+
+    // Reorder the rows based on the sorted headers
+    const reorderedRows = combinedRows.map((row) => {
+      const reorderedCells: TableCell[] = [];
+      sortedHeaderArray.forEach((header) => {
+        const index = headerArray.indexOf(header);
+        reorderedCells.push(row.cells[index]);
+      });
+      return { cells: reorderedCells };
+    });
+
+    return { rows: reorderedRows };
   };
 
   return (

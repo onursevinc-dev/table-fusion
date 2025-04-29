@@ -4,9 +4,9 @@
   "private": true,
   "author": "Onur Sevinc <https://onursevinc.dev>",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev -p 9998",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 9998",
     "lint": "next lint"
   },
   "dependencies": {

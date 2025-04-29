@@ -1,3 +1,8 @@
+/**
+ * @author Onur Sevinc
+ * @website https://onursevinc.dev
+ */
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";

@@ -1,3 +1,8 @@
+/**
+ * @author Onur Sevinc
+ * @website https://onursevinc.dev
+ */
+
 "use client";
 
 import { useState } from "react";

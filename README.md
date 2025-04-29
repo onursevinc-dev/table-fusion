@@ -10,10 +10,13 @@ A modern web application built with Next.js that allows users to select and extr
 
 - PDF file upload and preview
 - Table selection and extraction
+- Smart table merging with varying columns
+- Automatic column alignment and data matching
 - Modern and responsive UI
 - Dark/Light mode support
 - Interactive table selection interface
 - PDF manipulation capabilities
+- JSON export functionality
 
 ## Tech Stack
 
@@ -24,6 +27,30 @@ A modern web application built with Next.js that allows users to select and extr
 - **PDF Processing**: pdf-lib, pdfjs-dist
 - **State Management**: React Hooks
 - **Build Tool**: Turbopack
+
+## Key Features
+
+### Smart Table Merging
+
+- Automatically merges tables from different pages
+- Preserves common columns (e.g., POM Code, POM Description)
+- Appends new columns while maintaining data integrity
+- Handles overlapping columns intelligently
+- Merges rows with the same POM Code
+
+### Table Extraction
+
+- Precise table selection with interactive interface
+- Automatic column detection
+- Header row preservation
+- Data alignment based on column headers
+
+### Export Capabilities
+
+- Export merged tables to JSON format
+- Preserves table structure and data
+- Works with or without active selection
+- Maintains data integrity during export
 
 ## Prerequisites
 

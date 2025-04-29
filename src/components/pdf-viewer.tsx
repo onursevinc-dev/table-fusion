@@ -4,6 +4,11 @@ import dynamic from "next/dynamic";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
+/**
+ * @author Onur Sevinc
+ * @website https://onursevinc.dev
+ */
+
 // PDF bileşenlerini dinamik olarak yükle ve client-side only olarak işaretle
 const PDFViewerComponent = dynamic(() => import("./pdf-viewer-component"), {
   ssr: false,
